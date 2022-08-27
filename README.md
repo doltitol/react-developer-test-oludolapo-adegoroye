@@ -1,6 +1,6 @@
 # Scandiweb Junior Developer Test Assignment
-This app was coded in React with the use of SCSS and Redux.
-The design used for this app was gotten from the [link](https://www.figma.com/file/MSyCAqVy1UgNap0pvqH6H3/Junior-Frontend-Test-Designs-Public?node-id=0%3A1)
+This app was coded in React with the use of SCSS, ApolloClient and Redux.
+The design used for this app is available at [this link](https://www.figma.com/file/MSyCAqVy1UgNap0pvqH6H3/Junior-Frontend-Test-Designs-Public?node-id=0%3A1)
 
 
 ## Available Scripts
