@@ -1,0 +1,55 @@
+@import '../../styles/index.scss';
+.cart-overlay {
+  background-color: $overlay;
+  padding: 0 70px;
+  width: 100%;
+  height: calc(100vh - 80px);
+  left: 0;
+  right: 0;
+  position: absolute;
+  display: flex;
+  top: 80px;
+  z-index: 999;
+  justify-content: flex-end;
+
+  @media (max-width: 960px) {
+    padding: 0 30px;
+  }
+  @media (max-width: 550px) {
+    padding: 0 20px;
+  }
+  &-container {
+    width: 325px;
+    height: 677px;
+    background-color: $white;
+    padding: 30px 20px;
+    &-header {
+      &-text {
+        @include raleway(16px, 25.6px, 400);
+      }
+    }
+    &-cart {
+      height: 495px;
+      padding: 0 10px;
+      overflow: auto;
+    }
+    &-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-text {
+        @include roboto(16px, 18px, 500);
+      }
+      &-pricing {
+        @include raleway(16px, 25.6px, 700);
+      }
+    }
+    &-buttons{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+  }
+}

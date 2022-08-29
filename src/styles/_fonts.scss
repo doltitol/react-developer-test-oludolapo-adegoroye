@@ -1,0 +1,35 @@
+@import 'colors';
+
+$fontRaleway: 'Raleway', sans-serif;
+$fontRoboto: 'Roboto', sans-serif;
+$fontRobotoCondensed: 'Roboto Condensed', sans-serif;
+$fontSourceSansPro: 'Source Sans Pro', sans-serif;
+
+@mixin raleway($font_size, $line_height, $font_weight) {
+  font-family: $fontRaleway;
+  font-weight: $font_weight;
+  color: $black;
+  font-size: $font_size;
+  line-height: $line_height;
+}
+@mixin roboto($font_size, $line_height, $font_weight) {
+  font-family: $fontRoboto;
+  font-weight: $font_weight;
+  color: $black;
+  font-size: $font_size;
+  line-height: $line_height;
+}
+@mixin robotoCondensed($font_size, $line_height, $font_weight) {
+  font-family: $fontRobotoCondensed;
+  font-weight: $font_weight;
+  color: $black;
+  font-size: $font_size;
+  line-height: $line_height;
+}
+@mixin sourceSansPro($font_size, $line_height, $font_weight) {
+  font-family: $fontSourceSansPro;
+  font-weight: $font_weight;
+  color: $black;
+  font-size: $font_size;
+  line-height: $line_height;
+}

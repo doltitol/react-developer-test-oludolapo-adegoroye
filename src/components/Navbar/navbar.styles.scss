@@ -1,0 +1,148 @@
+@import '../../styles/index.scss';
+
+.header {
+  height: 80px;
+  background-color: $white;
+  padding: 0 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  @media (max-width: 960px) {
+    padding: 0 30px;
+  }
+  @media (max-width: 550px) {
+    padding: 0 20px;
+  }
+  &-navigation {
+    &-link {
+      list-style: none;
+      position: absolute;
+      top: 30px;
+      @media (max-width: 960px) {
+        display: none;
+      }
+      &-item {
+        display: inline-block;
+        margin: 0 10px;
+        @include raleway(19px, 19.2px, 400);
+        text-transform: uppercase;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.7s ease-in-out;
+        a {
+          text-decoration: none;
+          color: $black;
+          display: block;
+          padding-left: 13px;
+          padding-right: 13px;
+          &:hover {
+            @include raleway(19px, 19.2px, 600);
+            color: $primary;
+            border-bottom: 3px solid $primary;
+            padding-bottom: 30px;
+          }
+        }
+
+        .link-active {
+          @include raleway(19px, 19.2px, 600);
+          color: $primary;
+          border-bottom: 3px solid $primary;
+          padding-bottom: 30px;
+          margin: 0;
+          &-underline {
+            background: $primary;
+            height: 2px;
+            width: 100%;
+          }
+        }
+      }
+    }
+    &-mobile {
+      @media (min-width: 961px) {
+        display: none;
+        position: relative;
+      }
+      &-dropdown {
+          background-color: white;
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 100vh;
+          top: 0;
+          z-index: 999;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          &-close{
+          position: absolute;
+          right: 30px;
+          top: 30px;
+          }
+          &-link{
+          list-style: none;
+          &-item{
+          display: block;
+        margin: 30px 10px;
+        @include raleway(16px, 19.2px, 400);
+        text-transform: uppercase;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.7s ease-in-out;
+        a {
+          text-decoration: none;
+          color: $black;
+          display: block;
+          padding-left: 13px;
+          padding-right: 13px;
+          &:hover {
+            @include raleway(16px, 19.2px, 600);
+            color: $primary;
+            border-bottom: 3px solid $primary;
+            padding-bottom: 5px;
+          }
+        }
+
+        .link-active {
+          @include raleway(19px, 19.2px, 600);
+          color: $primary;
+          border-bottom: 3px solid $primary;
+          padding-bottom: 5px;
+          margin: 0;
+          &-underline {
+            background: $primary;
+            height: 2px;
+            width: 100%;
+          }
+        }
+          }
+          }
+        }
+    }
+  }
+  &-logo {
+    text-align: center;
+  }
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    &-currency {
+      margin: 0 20px;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      cursor: pointer;
+      &-text {
+        width: 30px;
+        @include raleway(22px, 28.8px, 500);
+        text-align: center;
+        border: none;
+        background-color: transparent;
+      }
+    }
+  }
+}

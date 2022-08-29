@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Roboto+Condensed:wght@700&family=Roboto:wght@400;500&family=Source+Sans+Pro&display=swap");
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+}
+
+.slide-right {
+  -webkit-animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(50px);
+    transform: translateX(50px);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(50px);
+    transform: translateX(50px);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+
+.cart-overlay {
+  background-color: rgba(57, 55, 72, 0.22);
+  padding: 0 70px;
+  width: 100%;
+  height: calc(100vh - 80px);
+  left: 0;
+  right: 0;
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  top: 80px;
+  z-index: 999;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+@media (max-width: 960px) {
+  .cart-overlay {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 550px) {
+  .cart-overlay {
+    padding: 0 20px;
+  }
+}
+
+.cart-overlay-container {
+  width: 325px;
+  height: 677px;
+  background-color: #ffffff;
+  padding: 30px 20px;
+}
+
+.cart-overlay-container-header-text {
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  color: #1D1F22;
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.cart-overlay-container-cart {
+  height: 495px;
+  padding: 0 10px;
+  overflow: auto;
+}
+
+.cart-overlay-container-total {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cart-overlay-container-total-text {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  color: #1D1F22;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.cart-overlay-container-total-pricing {
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  color: #1D1F22;
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.cart-overlay-container-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 30px;
+}
+/*# sourceMappingURL=cartoverlay.style.css.map */
