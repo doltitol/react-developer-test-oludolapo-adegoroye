@@ -1,0 +1,7 @@
+@import '../../styles/index.scss';
+
+.main-button{
+  padding: 10px 20px;
+  text-transform: uppercase;
+   @include raleway(14px, 16.8px, 600);
+}
