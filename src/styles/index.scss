@@ -7,6 +7,15 @@ $xl: 2000px;
 $lg: 1440px;
 $md: 960px;
 $sm: 550px;
+
+@mixin container(){
+  background-color: $white;
+  padding: 80px 70px;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 80px;
+}
 * {
   box-sizing: border-box;
   padding: 0;
@@ -16,7 +25,9 @@ $sm: 550px;
 body{
 background: $white;
 }
-
+a{
+text-decoration: none;
+}
 .slide-right {
   -webkit-animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;

@@ -11,6 +11,10 @@ body {
   background: #ffffff;
 }
 
+a {
+  text-decoration: none;
+}
+
 .slide-right {
   -webkit-animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -38,6 +42,33 @@ body {
   }
 }
 
+.slide-down {
+  -webkit-animation: slide-down 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-down 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes slide-down {
+  0% {
+    -webkit-transform: translateY(-25%);
+    transform: translateY(-25%);
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    -webkit-transform: translateY(-25%);
+    transform: translateY(-25%);
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+}
+
 .main-button {
   padding: 10px 20px;
   text-transform: uppercase;
@@ -46,5 +77,22 @@ body {
   color: #1D1F22;
   font-size: 14px;
   line-height: 16.8px;
+}
+
+.attribute-button {
+  width: 63px;
+  height: 45px;
+  border: 1px solid #1D1F22;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  color: #1D1F22;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.color-button {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
 }
 /*# sourceMappingURL=buttons.style.css.map */

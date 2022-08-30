@@ -69,51 +69,65 @@ a {
   }
 }
 
-.currency-dropdown {
+.home {
+  background-color: #ffffff;
+  padding: 80px 70px;
   width: 100%;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 80px;
-  height: calc(100vh - 80px);
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 80px;
+}
+
+.home-heading {
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  color: #1D1F22;
+  font-size: 42px;
+  line-height: 67.2px;
+  text-transform: capitalize;
+}
+
+.home-product {
+  margin: 30px auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  grid-gap: 12rem;
+}
+
+@media (max-width: 1400px) {
+  .home-product {
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
+    grid-gap: 6rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .home-product {
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
+    grid-gap: 6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-product {
+    -ms-grid-columns: (1fr)[1];
+        grid-template-columns: repeat(1, 1fr);
+    grid-gap: 6rem;
+    margin: 0 10px;
+  }
+}
+
+.home-loadbutton {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  padding: 0 70px;
-  z-index: 99;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 70px;
 }
-
-.currency-dropdown-list {
-  list-style: none;
-  padding: 10px 0;
-  width: 114px;
-  max-height: 260px;
-  background-color: #ffffff;
-  -webkit-filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
-          filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
-}
-
-.currency-dropdown-list-item {
-  padding: 10px;
-  text-align: center;
-}
-
-.currency-dropdown-list-item span {
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  color: #1D1F22;
-  font-size: 19px;
-  line-height: 28.8px;
-  padding: 0 2px;
-  cursor: pointer;
-  -webkit-transition: all 0.7s ease-in-out;
-  transition: all 0.7s ease-in-out;
-}
-
-.currency-dropdown-list-item:hover {
-  background-color: #EEEEEE;
-}
-/*# sourceMappingURL=currencyoverlay.style.css.map */
+/*# sourceMappingURL=home.style.css.map */

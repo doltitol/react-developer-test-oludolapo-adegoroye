@@ -11,6 +11,7 @@
   width: 100%;
   margin-right: auto;
   margin-left: auto;
+  z-index: 9999;
   @media (max-width: 960px) {
     padding: 0 30px;
   }
@@ -43,7 +44,7 @@
             @include raleway(19px, 19.2px, 600);
             color: $primary;
             border-bottom: 3px solid $primary;
-            padding-bottom: 30px;
+            padding-bottom: 25px;
           }
         }
 
@@ -51,7 +52,7 @@
           @include raleway(19px, 19.2px, 600);
           color: $primary;
           border-bottom: 3px solid $primary;
-          padding-bottom: 30px;
+          padding-bottom: 25px;
           margin: 0;
           &-underline {
             background: $primary;

@@ -11,24 +11,11 @@ export class Navbar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      showCurrency: false,
-      showCart: false,
-      currency: Currencies.data.currencies[0].symbol,
       showMobile: false,
+      showCart: false,
     };
   }
-  handleCurrency = (currency) => {
-    this.setState((prevState) => {
-      return {
-        currency:
-          prevState.currency === currency.symbol
-            ? prevState.currency
-            : currency.symbol,
-        showCurrency: false,
-      };
-    });
-  };
-  closeCart = () => {
+closeCart = () => {
     this.setState({
       showCart: !this.state.showCart,
     });
@@ -47,11 +34,6 @@ export class Navbar extends PureComponent {
                   }
                 >
                   {link.name}
-                  <div
-                    className={({ isActive }) =>
-                      isActive ? 'link-active-underline' : ''
-                    }
-                  ></div>
                 </NavLink>
               </li>
             ))}
@@ -86,11 +68,6 @@ export class Navbar extends PureComponent {
                         }
                       >
                         {link.name}
-                        <div
-                          className={({ isActive }) =>
-                            isActive ? 'link-active-underline' : ''
-                          }
-                        ></div>
                       </NavLink>
                     </li>
                   ))}
@@ -100,45 +77,42 @@ export class Navbar extends PureComponent {
           </div>
         </div>
         <div className='header-logo'>
-          <Icons.Logo size={40} />
+          <NavLink to='/'>
+            <Icons.Logo size={40} />
+          </NavLink>
         </div>
         <div className='header-actions'>
           <div
             className='header-actions-currency'
-            onClick={() =>
-              this.setState({ showCurrency: !this.state.showCurrency })
-            }
+            onClick={this.props.handleShowCurrency}
           >
             <p className='header-actions-currency-text'>
-              {this.state.currency}
+              {this.props.currency}
             </p>
             <Icons.Dropdown
               size={6}
               color='#000000'
               style={{
-                transform: this.state.showCurrency
+                transform: this.props.showCurrency
                   ? 'rotate(180deg)'
                   : 'rotate(0deg)',
               }}
             />
-            {this.state.showCurrency && (
+            {this.props.showCurrency && (
               <CurrencyDropdown
                 currencies={Currencies.data.currencies}
-                handleCurrency={this.handleCurrency}
+                handleCurrency={this.props.handleCurrency}
               />
             )}
           </div>
-          <div className='header-actions-cart'>
-            <Icons.Cart
-              size={22}
-              color='#000000'
-              onClick={() => this.setState({ showCart: !this.state.showCart })}
-            />
+          <div
+            className='header-actions-cart'
+            onClick={() => this.setState({ showCart: !this.state.showCart })}
+          >
+            <Icons.Cart size={22} color='#000000' />
             {this.state.showCart && (
               <CartOverlay
-                closeCart={() =>
-                  this.setState({ showCart: !this.state.showCart })
-                }
+                closeCart={() => this.setState({ showCart: false })}
               />
             )}
           </div>
