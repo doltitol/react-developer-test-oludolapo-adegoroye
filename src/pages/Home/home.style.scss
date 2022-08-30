@@ -1,0 +1,32 @@
+@import '../../styles/index.scss';
+.home {
+  @include container;
+  &-heading {
+    @include raleway(42px, 67.2px, 400);
+    text-transform: capitalize;
+  }
+  &-product {
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 12rem;
+     @media (max-width: 1400px){
+     grid-template-columns: repeat(3, 1fr);
+    grid-gap: 6rem;
+    }
+    @media (max-width: 1200px){
+     grid-template-columns: repeat(2, 1fr);
+    grid-gap: 6rem;
+    }
+    @media (max-width: 600px) {
+       grid-template-columns: repeat(1, 1fr);
+    grid-gap: 6rem;
+    margin: 0 10px;
+    }
+  }
+  &-loadbutton{
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+  }
+}
