@@ -70,7 +70,7 @@ a {
 }
 
 .header {
-  height: 80px;
+  height: 75px;
   background-color: #ffffff;
   padding: 0 70px;
   display: -webkit-box;
@@ -90,6 +90,7 @@ a {
   margin-right: auto;
   margin-left: auto;
   z-index: 9999;
+  position: fixed;
 }
 
 @media (max-width: 960px) {
@@ -297,5 +298,37 @@ a {
   text-align: center;
   border: none;
   background-color: transparent;
+}
+
+.header-actions-cart {
+  position: relative;
+}
+
+.header-actions-cart-badge {
+  background-color: #1D1F22;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: -5px;
+  right: -10px;
+}
+
+.header-actions-cart-badge p {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  color: #1D1F22;
+  font-size: 12px;
+  line-height: 16.41px;
+  color: #ffffff;
 }
 /*# sourceMappingURL=navbar.styles.css.map */

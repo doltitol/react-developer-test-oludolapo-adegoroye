@@ -7,6 +7,8 @@ import ColorButton from '../../components/Buttons/ColorButton';
 import { numberCommaFormatter } from '../../util';
 import MainButton from '../../components/Buttons/MainButton';
 import { Interweave } from 'interweave';
+import { connect } from 'react-redux';
+import { addToCart } from '../../redux/actions/cartActions';
 
 function getParams(Component) {
   return (props) => <Component {...props} params={useParams()} />;
@@ -46,11 +48,9 @@ export class Product extends PureComponent {
       (category) => category.name === 'all'
     );
     const product = category[0].products.filter((product) => product.id === id);
-    console.log(product);
     const pricing = product[0].prices.filter(
       (price) => price.currency.symbol === this.props.currency
     );
-    console.log(pricing);
     return (
       <div className='product'>
         <div className='product-imageContainer'>
@@ -110,11 +110,7 @@ export class Product extends PureComponent {
                       >
                         <AttributeButton
                           text={item.value}
-                          active={
-                            this.state.activeAttribute === item.id
-                              ? true
-                              : false
-                          }
+                          active={this.state.activeAttribute === item.id}
                           onClick={() => this.pickAttribute(item.id)}
                         />
                       </div>
@@ -163,6 +159,15 @@ export class Product extends PureComponent {
               width='292px'
               height='52px'
               disabled={!product[0].inStock}
+              onClick={() =>
+                product[0].inStock
+                  ? this.props.addToCart(
+                      product[0],
+                      this.state.activeColor,
+                      this.state.activeAttribute
+                    )
+                  : null
+              }
             />
             <div className='product-detailsContainer-footer-desc'>
               <Interweave content={product[0].description} />
@@ -173,5 +178,18 @@ export class Product extends PureComponent {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    products: state.cart.products,
+    currency: state.cart.currency,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (product, activeColor, activeAttribute) => {
+      dispatch(addToCart(product, activeColor, activeAttribute));
+    },
+  };
+};
 
-export default getParams(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(getParams(Product));

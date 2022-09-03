@@ -4,6 +4,7 @@
   &-heading {
     @include raleway(42px, 67.2px, 400);
     text-transform: capitalize;
+    margin-top: 50px;
   }
   &-product {
     margin: 30px auto;

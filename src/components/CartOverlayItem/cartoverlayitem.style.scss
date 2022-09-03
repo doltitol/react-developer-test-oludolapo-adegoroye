@@ -1,0 +1,50 @@
+@import '../../styles/index.scss';
+
+.cart-overlay-item{
+width: 100%;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 0;
+margin: 5px 0 20px 0;
+&-details{
+  width: 50%;
+  &-text{
+  @include raleway(16px, 25.6px, 300);
+  }
+   &-price{
+  @include raleway(16px, 25.6px, 500);
+  }
+  &-attribute{
+  margin-top: 7px;
+  @include raleway(14px, 18px, 500);
+  &-items{
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  &-item{
+  margin-right: 5px;
+  }
+  }
+  }
+}
+&-count{
+width: 10%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: center;
+&-text{
+@include raleway(18px, 25.6px, 500);
+}
+}
+&-imageContainer{
+  width: 121px;
+  height: 190px;
+  &-img{
+  width: 121px;
+  height: 190px;
+  object-fit:fill;
+  }
+}
+}

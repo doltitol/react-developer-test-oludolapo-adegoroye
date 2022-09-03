@@ -80,19 +80,34 @@ a {
 }
 
 .attribute-button {
-  width: 63px;
-  height: 45px;
   border: 1px solid #1D1F22;
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 400;
   color: #1D1F22;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 18px;
 }
 
 .color-button {
   width: 40px;
   height: 40px;
-  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.color-button div {
+  width: 35px;
+  height: 35px;
 }
 /*# sourceMappingURL=buttons.style.css.map */
