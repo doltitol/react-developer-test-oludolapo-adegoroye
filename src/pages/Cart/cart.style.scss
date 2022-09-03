@@ -1,0 +1,32 @@
+@import '../../styles/index.scss';
+
+.cart {
+  @include container;
+  &-heading {
+    text-transform: uppercase;
+    @include raleway(32px, 40px, 700);
+    margin-top: 50px;
+  }
+  &-cartList {
+    margin-top: 50px;
+    border-top: 1px solid $border;
+  }
+  &-cartTotal {
+    margin: 20px 0;
+    &-item {
+      margin: 5px 0;
+      display: flex;
+      flex-direction: row;
+      &-heading {
+        @include raleway(20px, 28px, 400);
+        width: 100px;
+      }
+      &-amount {
+        @include raleway(20px, 28px, 700);
+      }
+    }
+    &-button{
+    margin-top: 20px;
+    }
+  }
+}

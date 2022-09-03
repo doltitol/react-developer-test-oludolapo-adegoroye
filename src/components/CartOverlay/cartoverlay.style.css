@@ -70,33 +70,23 @@ a {
 }
 
 .cart-overlay {
-  background-color: rgba(57, 55, 72, 0.22);
-  padding: 0 70px;
+  position: fixed;
+  /* Sit on top of the page content */
   width: 100%;
-  height: calc(100vh - 80px);
+  /* Full width (cover the whole page) */
+  height: 100%;
+  /* Full height (cover the whole page) */
+  top: 70px;
   left: 0;
   right: 0;
-  position: absolute;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  top: 80px;
-  z-index: 999;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-}
-
-@media (max-width: 960px) {
-  .cart-overlay {
-    padding: 0 30px;
-  }
-}
-
-@media (max-width: 550px) {
-  .cart-overlay {
-    padding: 0 20px;
-  }
+  bottom: 0;
+  background-color: rgba(57, 55, 72, 0.22);
+  /* Black background with opacity */
+  z-index: 2;
+  /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer;
+  /* Add a pointer on hover */
+  z-index: 20;
 }
 
 .cart-overlay-container {
@@ -104,6 +94,10 @@ a {
   height: 677px;
   background-color: #ffffff;
   padding: 30px 20px;
+  position: absolute;
+  top: 80px;
+  right: 70px;
+  z-index: 21;
 }
 
 .cart-overlay-container-header-text {

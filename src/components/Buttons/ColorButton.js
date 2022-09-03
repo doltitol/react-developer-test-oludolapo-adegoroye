@@ -7,12 +7,16 @@ export class ColorButton extends PureComponent {
         className='color-button'
         style={{
           border: this.props.active ? '2px solid #5ECE7B' : 'none',
+          width: this.props.small ? '18px' : '40px',
+          height: this.props.small ? '18px' : '40px',
         }}
         onClick={this.props.onClick}
       >
         <div
           style={{
             background: this.props.color,
+            width: this.props.small ? '15px' : '35px',
+            height: this.props.small ? '15px' : '35px',
           }}
         ></div>
       </button>

@@ -3,12 +3,28 @@ import { Icons } from '../../assets/images/Icons';
 import { numberCommaFormatter } from '../../util';
 import './productitem.style.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { addToCart } from '../../redux/actions/cartActions';
 
 export class ProductItem extends PureComponent {
   state = {
     showAddToCart: false,
   };
   render() {
+    const activeSize =
+      this.props.product.attributes.filter(
+        (attr) => attr.id === 'Size' || attr.id === 'Capacity'
+      ).length !== 0
+        ? this.props.product.attributes.filter(
+            (attr) => attr.id === 'Size' || attr.id === 'Capacity'
+          )[0].items[0].id
+        : '';
+    const activeColor =
+      this.props.product.attributes.filter((attr) => attr.id === 'Color')
+        .length !== 0
+        ? this.props.product.attributes.filter((attr) => attr.id === 'Color')[0]
+            .items[0].id
+        : '';
     return (
       <div
         className='product-item'
@@ -32,9 +48,21 @@ export class ProductItem extends PureComponent {
         {this.state.showAddToCart && (
           <Icons.AddToCart
             size={80}
-            color='#5ECE7B'
+            color={
+              !this.props.product.inStock
+                ? 'rgba(94, 206, 123, 0.8)'
+                : '#5ECE7B'
+            }
             className='product-item-addtocart'
-            onClick={() => alert('clicked')}
+            onClick={() =>
+              this.props.product.inStock
+                ? this.props.addToCart(
+                    this.props.product,
+                    activeColor,
+                    activeSize
+                  )
+                : null
+            }
           />
         )}
         <Link to={`/product/${this.props.product.id}`}>
@@ -64,5 +92,17 @@ export class ProductItem extends PureComponent {
     );
   }
 }
-
-export default ProductItem;
+const mapStateToProps = (state) => {
+  return {
+    products: state.cart.products,
+    currency: state.cart.currency,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (product, activeColor, activeAttribute) => {
+      dispatch(addToCart(product, activeColor, activeAttribute));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductItem);

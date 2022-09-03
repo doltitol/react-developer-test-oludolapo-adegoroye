@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Roboto+Condensed:wght@700&family=Roboto:wght@400;500&family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Roboto+Condensed:wght@700&family=Roboto:wght@400;500&family=Source+Sans+Pro&display=swap');
 @import 'colors';
 @import 'fonts';
 
@@ -27,6 +27,7 @@ background: $white;
 }
 a{
 text-decoration: none;
+cursor: pointer;
 }
 .slide-right {
   -webkit-animation: slide-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
