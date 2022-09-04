@@ -13,6 +13,7 @@ export class Navbar extends PureComponent {
       showMobile: false,
       showCart: false,
       showCurrency: false,
+      currency: '$',
     };
   }
   handleShowCart = () => {
@@ -21,18 +22,21 @@ export class Navbar extends PureComponent {
   handleShowCurrency = () => {
     this.setState({ showCurrency: !this.state.showCurrency });
   };
+  handleCurrency = (currency) => {
+    this.setState({ currency: currency });
+    console.log(currency);
+  };
   closeCart = () => {
     this.setState({
       showCart: this.state.showCart ? false : false,
     });
   };
-
   render() {
     return (
       <div className='header'>
         <div className='header-navigation'>
           <ul className='header-navigation-link'>
-            {this.props.products.data.categories.map((link) => (
+            {this.props.categories.map((link) => (
               <li className='header-navigation-link-item' key={link.name}>
                 <NavLink
                   to={`/${link.name}`}
@@ -62,7 +66,7 @@ export class Navbar extends PureComponent {
                   onClick={() => this.setState({ showMobile: false })}
                 />
                 <ul className='header-navigation-mobile-dropdown-link'>
-                  {this.props.products.data.categories.map((link) => (
+                  {this.props.categories.map((link) => (
                     <li
                       className='header-navigation-mobile-dropdown-link-item'
                       key={link.name}
@@ -106,7 +110,10 @@ export class Navbar extends PureComponent {
               }}
             />
             {this.state.showCurrency && (
-              <CurrencyDropdown closeCart={() => this.closeCart()} />
+              <CurrencyDropdown
+                closeCart={() => this.closeCart()}
+                handleCurrency={() => this.handleCurrency()}
+              />
             )}
           </div>
           <div
@@ -130,12 +137,8 @@ export class Navbar extends PureComponent {
 }
 const mapStateToProps = (state) => {
   return {
-    products: state.cart.products,
-    currency: state.cart.currency,
-    currencies: state.cart.currencies,
     cartQuantity: state.cart.cartQuantity,
-    showCart: state.cart.showCart,
-    showCurrency: state.cart.showCurrency,
+    currency: state.cart.currency,
   };
 };
 

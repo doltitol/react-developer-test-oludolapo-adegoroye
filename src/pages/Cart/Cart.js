@@ -24,6 +24,11 @@ export class Cart extends PureComponent {
       <div className='cart'>
         <h1 className='cart-heading'>cart</h1>
         <div className='cart-cartList'>
+          {this.props.cartItems.length === 0 && (
+            <div className='cart-cartList-empty'>
+              <h1>Your cart is empty!</h1>
+            </div>
+          )}
           {this.props.cartItems.map((item, index) => (
             <CartItem cartItem={item} key={`${item.id}-${index}`} />
           ))}

@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,kBAAkB,CAAA;EAClB,KAAK,EAAE,IAAI;EACX,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,GAAG;EACnB,eAAe,EAAE,aAAa;CAC7B",
-    "sources": [
-        "cartoverlayitem.style.scss"
-    ],
-    "names": [],
-    "file": "cartoverlayitem.style.css"
-}

@@ -11,10 +11,7 @@ const cartReducer = (state = initialState, action) => {
     case CHANGE_CURRENCY:
       return {
         ...state,
-        currency:
-          state.currency === action.payload.currency
-            ? state.currency
-            : action.payload.currency.symbol,
+        currency: action.payload.currency,
         showCurrency: false,
         showCart: false,
       };
