@@ -13,6 +13,7 @@ export class AttributeButton extends PureComponent {
           fontSize: this.props.small ? '0.6em' : '1.1em',
         }}
         onClick={this.props.onClick}
+        data-testid='attribute-button'
       >
         {this.props.text}
       </button>

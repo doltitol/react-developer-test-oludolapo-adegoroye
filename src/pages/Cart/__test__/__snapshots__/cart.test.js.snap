@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Cart /> spec renders the empty component 1`] = `undefined`;
+
+exports[`<Cart /> spec renders the empty component 2`] = `undefined`;

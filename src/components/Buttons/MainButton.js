@@ -10,6 +10,7 @@ export class MainButton extends PureComponent {
     return (
       <button
         className='main-button'
+        data-testid='main-button'
         style={{
           width: this.props.width,
           border: this.props.outline

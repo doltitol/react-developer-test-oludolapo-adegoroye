@@ -11,6 +11,7 @@ export class CountButton extends PureComponent {
           height: this.props.small ? '24px' : '45px',
           fontSize: this.props.small ? '20px' : '40px',
         }}
+        data-testid='count-button'
       >
         {this.props.text}
       </button>

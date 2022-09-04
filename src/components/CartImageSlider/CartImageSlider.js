@@ -21,7 +21,7 @@ export class CartImageSlider extends PureComponent {
   };
   render() {
     return (
-      <div className='cart-image-slider'>
+      <div className='cart-image-slider' data-testid='cart-image-slider'>
         <img
           src={this.props.gallery[this.state.imageCount]}
           alt=''

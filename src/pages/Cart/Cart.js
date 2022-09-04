@@ -6,6 +6,7 @@ import { numberCommaFormatter } from '../../util';
 import MainButton from '../../components/Buttons/MainButton';
 import CartItem from '../../components/CartItem/CartItem';
 
+
 export class Cart extends PureComponent {
   render() {
     const tax = 21;
@@ -21,12 +22,12 @@ export class Cart extends PureComponent {
     const taxAmount = total * (21 / 100);
 
     return (
-      <div className='cart'>
+      <div className='cart' ref={this.cartRef}>
         <h1 className='cart-heading'>cart</h1>
         <div className='cart-cartList'>
           {this.props.cartItems.length === 0 && (
             <div className='cart-cartList-empty'>
-              <h1>Your cart is empty!</h1>
+              <h1 data-testid='empty-text'>Your cart is empty!</h1>
             </div>
           )}
           {this.props.cartItems.map((item, index) => (

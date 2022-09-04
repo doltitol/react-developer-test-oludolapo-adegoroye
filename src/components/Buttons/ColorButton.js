@@ -11,6 +11,7 @@ export class ColorButton extends PureComponent {
           height: this.props.small ? '18px' : '40px',
         }}
         onClick={this.props.onClick}
+        data-testid='color-button'
       >
         <div
           style={{

@@ -35,7 +35,7 @@ export class Navbar extends PureComponent {
     return (
       <div className='header'>
         <div className='header-navigation'>
-          <ul className='header-navigation-link'>
+          <ul className='header-navigation-link' data-testid='links'>
             {this.props.categories.map((link) => (
               <li className='header-navigation-link-item' key={link.name}>
                 <NavLink

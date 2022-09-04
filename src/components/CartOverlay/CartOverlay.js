@@ -18,7 +18,7 @@ export class CartOverlay extends PureComponent {
       0
     );
     return (
-      <div>
+      <div data-testid='cart-overlay'>
         <div
           className='cart-overlay'
           onClick={() => this.props.closeCart()}
