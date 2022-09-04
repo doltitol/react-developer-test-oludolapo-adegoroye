@@ -36,6 +36,7 @@ export class Product extends PureComponent {
       this.setState((prevState) => {
         return {
           product: prevState.product === result ? prevState.product : result,
+          thumbImg: '',
         };
       });
     });
@@ -46,6 +47,7 @@ export class Product extends PureComponent {
         this.setState((prevState) => {
           return {
             product: prevState.product === result ? prevState.product : result,
+            thumbImg: '',
           };
         })
       );
@@ -100,26 +102,28 @@ export class Product extends PureComponent {
           <>
             <div className='product-imageContainer'>
               <div className='product-imageContainer-thumbnailContainer'>
-                {this.state.product.data.product.gallery.map((image, index) => (
-                  <div
-                    className='product-imageContainer-thumbnailContainer-thumb'
-                    key={index}
-                    onClick={() => this.changeImg(image)}
-                  >
-                    <img
-                      src={image}
-                      alt='productImage'
-                      className='product-imageContainer-thumbnailContainer-thumb-img'
-                    />
-                  </div>
-                ))}
+                {this.state.product?.data.product.gallery.map(
+                  (image, index) => (
+                    <div
+                      className='product-imageContainer-thumbnailContainer-thumb'
+                      key={index}
+                      onClick={() => this.changeImg(image)}
+                    >
+                      <img
+                        src={image}
+                        alt='productImage'
+                        className='product-imageContainer-thumbnailContainer-thumb-img'
+                      />
+                    </div>
+                  )
+                )}
               </div>
               <div className='product-imageContainer-image'>
                 <img
                   src={
                     this.state.thumbImg !== ''
                       ? this.state.thumbImg
-                      : this.state.product.data.product.gallery[0]
+                      : this.state.product?.data.product.gallery[0]
                   }
                   alt='productImage'
                   className='product-imageContainer-image-img'
