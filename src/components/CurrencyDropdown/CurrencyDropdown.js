@@ -29,7 +29,7 @@ export class CurrencyDropdown extends PureComponent {
       <>
         {this.state.currencies?.data && (
           <div className='currency-dropdown'>
-            <ul className='currency-dropdown-list'>
+            <ul className='currency-dropdown-list' data-testid='currency'>
               {this.state.currencies?.data.currencies.map((currency) => (
                 <li
                   key={currency.label}

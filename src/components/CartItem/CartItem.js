@@ -25,7 +25,7 @@ export class CartItem extends PureComponent {
       ? this.props.cartItem.attributes.filter((attr) => attr.id !== 'Color')
       : null;
     return (
-      <div className='cart-item'>
+      <div className='cart-item' data-testid='cart-item'>
         <div className='cart-item-details'>
           <Link
             to={`/product/${this.props.cartItem.id}`}

@@ -97,7 +97,7 @@ export class Product extends PureComponent {
       : null;
 
     return (
-      <div className='product'>
+      <div className='product' data-testid='product'>
         {this.state.product?.data && (
           <>
             <div className='product-imageContainer'>

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CartOverlay /> spec renders the empty component 1`] = `undefined`;

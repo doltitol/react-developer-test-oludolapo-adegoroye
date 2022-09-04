@@ -24,7 +24,7 @@ export class CartOverlayItem extends PureComponent {
       ? this.props.cartItem.attributes.filter((attr) => attr.id !== 'Color')
       : null;
     return (
-      <div className='cart-overlay-item'>
+      <div className='cart-overlay-item' data-testid='cart-overlay-item'>
         <div className='cart-overlay-item-details'>
           <Link
             to={`/product/${this.props.cartItem.id}`}
@@ -47,7 +47,8 @@ export class CartOverlayItem extends PureComponent {
             </p>
           </Link>
           <p className='cart-overlay-item-details-price'>
-            {pricing[0].currency.symbol} {numberCommaFormatter(pricing[0].amount)}
+            {pricing[0].currency.symbol}{' '}
+            {numberCommaFormatter(pricing[0].amount)}
           </p>
           {size.length !== 0 && (
             <div className='cart-overlay-item-details-attribute'>

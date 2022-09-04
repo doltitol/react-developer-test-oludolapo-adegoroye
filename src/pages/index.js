@@ -32,7 +32,7 @@ class Pages extends Component {
 
   render() {
     return (
-      <div>
+      <div data-testid='pages'>
         {this.state.categories?.data && (
           <div>
             {this.state.categories?.loading ? (

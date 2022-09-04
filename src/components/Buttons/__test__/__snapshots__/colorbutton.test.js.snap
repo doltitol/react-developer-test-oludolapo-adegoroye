@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AttributeButton /> spec renders the component 1`] = `undefined`;
+
+exports[`<ColorButton /> spec renders the component 1`] = `undefined`;
