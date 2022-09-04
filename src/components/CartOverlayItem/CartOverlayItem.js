@@ -5,8 +5,8 @@ import CountButton from '../Buttons/CountButton';
 import './cartoverlayitem.style.scss';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { numberCommaFormatter } from '../../util';
 import { addQuantity, removeQuantity } from '../../redux/actions/cartActions';
-import {numberCommaFormatter} from '../../util';
 
 export class CartOverlayItem extends PureComponent {
   render() {
@@ -127,7 +127,6 @@ export class CartOverlayItem extends PureComponent {
 }
 const mapStateToProps = (state) => {
   return {
-    products: state.cart.products,
     currency: state.cart.currency,
   };
 };

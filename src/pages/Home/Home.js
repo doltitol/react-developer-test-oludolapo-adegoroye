@@ -2,66 +2,101 @@ import React, { PureComponent } from 'react';
 import MainButton from '../../components/Buttons/MainButton';
 import ProductItem from '../../components/ProductItem/ProductItem';
 import './home.style.scss';
+import { client } from '../../config/apolloClient';
 import { connect } from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
+import { allResolvers } from '../../graphql/resolvers';
 
 export class Home extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       pagination: 6,
+      page: {},
     };
   }
-  handlePagination = () => {
-    this.setState((prevState) => {
-      const product = this.props.products.data.categories.filter(
-        (category) => category.name === this.props.category
+  async getCategory() {
+    const cat = this.props.category;
+    return await client.query({
+      query: allResolvers.CATEGORY,
+      variables: {
+        input: {
+          title: cat,
+        },
+      },
+      fetchPolicy: 'network-only',
+    });
+  }
+  componentDidMount() {
+    this.getCategory().then((result) => {
+      this.setState((prevState) => {
+        return {
+          page: prevState.page === result ? prevState.page : result,
+        };
+      });
+    });
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.category !== prevProps.category) {
+      this.getCategory().then((result) =>
+        this.setState((prevState) => {
+          return {
+            page: prevState.page === result ? prevState.page : result,
+          };
+        })
       );
-      const products = product[0].products;
+    }
+  }
+  handlePagination = (catLen) => {
+    this.setState((prevState) => {
       return {
         pagination:
-          prevState.pagination < products.length
+          prevState.pagination < catLen
             ? prevState.pagination + 6
             : this.state.pagination,
       };
     });
   };
-  addToCart = (product, activeAttribute, activeColor) => {
-    //this.props.addToCart(product, activeAttribute, activeColor);
-  };
+
   render() {
-    const product = this.props.products.data.categories.filter(
-      (category) => category.name === this.props.category
-    );
-    const products = product[0].products;
     return (
-      <div className='home'>
-        <h1 className='home-heading'>{this.props.category}</h1>
-        <div className='home-product'>
-          {products.slice(0, this.state.pagination).map((product) => (
-            <ProductItem product={product} key={product.id} />
-          ))}
-        </div>
-        <div className='home-loadbutton'>
-          {products.length > 6 && (
-            <MainButton
-              text='Load More'
-              width='200px'
-              height='53px'
-              onClick={() => this.handlePagination()}
-              disabled={false}
-            />
-          )}
-        </div>
-      </div>
+      <>
+        {this.state.page?.data && (
+          <div className='home'>
+            <h1 className='home-heading'>
+              {this.state.page?.data.category.name}
+            </h1>
+            <div className='home-product'>
+              {this.state.page?.data.category.products
+                .slice(0, this.state.pagination)
+                .map((product) => (
+                  <ProductItem productId={product.id} key={product.id} />
+                ))}
+            </div>
+            <div className='home-loadbutton'>
+              {this.state.page.data.category.products.length > 6 && (
+                <MainButton
+                  text='Load More'
+                  width='200px'
+                  height='53px'
+                  onClick={() =>
+                    this.handlePagination(
+                      this.state.page.data.category.products.length
+                    )
+                  }
+                  disabled={false}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }
 const mapStateToProps = (state) => {
   return {
-    products: state.cart.products,
     currency: state.cart.currency,
-    currencies: state.cart.currencies,
     cartQuantity: state.cart.cartQuantity,
   };
 };
