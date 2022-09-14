@@ -3,10 +3,8 @@ import { Component } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import Product from './Product/Product';
-import { connect } from 'react-redux';
 import Cart from './Cart/Cart';
-import { allResolvers } from '../graphql/resolvers';
-import { client } from '../config/apolloClient';
+import { useGQLQuery } from '../graphql/useGQLQuery';
 
 class Pages extends Component {
   constructor() {
@@ -17,18 +15,21 @@ class Pages extends Component {
   }
 
   componentDidMount() {
-    this.getCategories().then((result) =>
+    this.getCategories();
+  }
+  getCategories = () => {
+    useGQLQuery.categories().then((result) =>
       this.setState({
         categories: result,
       })
     );
-  }
-
-  async getCategories() {
-    return await client.query({
-      query: allResolvers.ALL_CATEGORIES,
-    });
-  }
+  };
+  getCategoryName = () => {
+    if (this.state.categories?.data) {
+      const { categories } = this.state.categories?.data;
+      return categories;
+    }
+  };
 
   render() {
     return (
@@ -41,42 +42,26 @@ class Pages extends Component {
               <div>{this.state.categories.error}</div>
             ) : (
               <BrowserRouter>
-                <Navbar categories={this.state.categories.data.categories} />
+                <Navbar categories={this.getCategoryName()} />
 
                 <Routes>
                   <Route
                     path='/'
                     element={
-                      <Navigate
-                        to={`/${this.state.categories.data.categories[0].name}`}
-                      />
+                      <Navigate to={`/${this.getCategoryName()[0].name}`} />
                     }
                   />
                   {this.state.categories !== {} &&
-                    this.state.categories?.data.categories.map((route) => (
+                    this.getCategoryName().map((route) => (
                       <Route
                         path={`/${route.name}`}
                         exact
-                        element={
-                          <Home
-                            category={route.name}
-                            categories={this.state.categories.data.categories}
-                          />
-                        }
+                        element={<Home category={route.name} />}
                         key={route.name}
                       />
                     ))}
 
-                  <Route
-                    path='/product/:id'
-                    exact
-                    element={
-                      <Product
-                        currency={this.props.currency}
-                        addToCart={this.addToCart}
-                      />
-                    }
-                  />
+                  <Route path='/product/:id' exact element={<Product />} />
                   <Route path='/cart' exact element={<Cart />} />
                 </Routes>
               </BrowserRouter>
@@ -87,11 +72,4 @@ class Pages extends Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    currency: state.cart.currency,
-    cartQuantity: state.cart.cartQuantity,
-  };
-};
-
-export default connect(mapStateToProps)(Pages);
+export default Pages;

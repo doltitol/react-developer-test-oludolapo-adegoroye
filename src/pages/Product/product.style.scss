@@ -156,6 +156,7 @@
     &-footer {
       margin-top: 30px;
       max-width: 300px;
+      position: relative;
       &-desc {
         margin-top: 30px;
         p {
@@ -163,6 +164,26 @@
           margin-top: 20px;
         }
       }
+     .tooltiptext{
+     position: absolute;
+     width: 200px;
+     right: -220px;
+     background-color: $primary;
+     padding: 10px;
+     border-radius: 5px;
+     color: $white;
+     transition: all 0.5s ease-in-out;
+      &::after{
+       content: "";
+   position: absolute;
+    top: 45%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent $primary transparent transparent;
+      }
+     }
     }
   }
 }

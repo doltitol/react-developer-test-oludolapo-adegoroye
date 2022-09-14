@@ -9,54 +9,66 @@ import { numberCommaFormatter } from '../../util';
 import { addQuantity, removeQuantity } from '../../redux/actions/cartActions';
 
 export class CartOverlayItem extends PureComponent {
-  render() {
+  getCartItemDetails = () => {
+    const { id, brand, name, activeAttribute, activeColor, qty, gallery } =
+      this.props.cartItem;
     const pricing = this.props.cartItem.prices.filter(
       (price) => price.currency.symbol === this.props.currency
     );
     const color = this.props.cartItem.attributes.filter(
       (attr) => attr.id === 'Color'
-    )
-      ? this.props.cartItem.attributes.filter((attr) => attr.id === 'Color')
-      : null;
+    );
     const size = this.props.cartItem.attributes.filter(
       (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-    )
-      ? this.props.cartItem.attributes.filter((attr) => attr.id !== 'Color')
-      : null;
+    );
+    return {
+      pricing,
+      color: color ? color : null,
+      size: size ? size : null,
+      id,
+      brand,
+      name,
+      activeAttribute,
+      activeColor,
+      qty,
+      gallery,
+    };
+  };
+  render() {
     return (
       <div className='cart-overlay-item' data-testid='cart-overlay-item'>
         <div className='cart-overlay-item-details'>
           <Link
-            to={`/product/${this.props.cartItem.id}`}
+            to={`/product/${this.getCartItemDetails().id}`}
             onClick={() => {
               this.props.closeCart();
             }}
           >
             <p className='cart-overlay-item-details-text'>
-              {this.props.cartItem.brand}
+              {this.getCartItemDetails().brand}
             </p>
           </Link>
           <Link
-            to={`/product/${this.props.cartItem.id}`}
+            to={`/product/${this.getCartItemDetails().id}`}
             onClick={() => {
               this.props.closeCart();
             }}
           >
             <p className='cart-overlay-item-details-text'>
-              {this.props.cartItem.name}
+              {this.getCartItemDetails().name}
             </p>
           </Link>
           <p className='cart-overlay-item-details-price'>
-            {pricing[0].currency.symbol}{' '}
-            {numberCommaFormatter(pricing[0].amount)}
+            {this.getCartItemDetails().pricing[0].currency.symbol}{' '}
+            {numberCommaFormatter(this.getCartItemDetails().pricing[0].amount)}
           </p>
-          {size.length !== 0 && (
+          {this.getCartItemDetails().size.length !== 0 && (
             <div className='cart-overlay-item-details-attribute'>
               <p className='cart-overlay-item-details-attribute-text'>
-                {size[0].name}:
+                {this.getCartItemDetails().size[0].name}:
               </p>
               <div className='cart-overlay-item-details-attribute-items'>
-                {size[0].items.map((attribute) => (
+                {this.getCartItemDetails().size[0].items.map((attribute) => (
                   <div
                     key={attribute.id}
                     className='cart-overlay-item-details-attribute-items-item'
@@ -64,7 +76,8 @@ export class CartOverlayItem extends PureComponent {
                     <AttributeButton
                       text={attribute.value}
                       active={
-                        this.props.cartItem.activeAttribute === attribute.id
+                        this.getCartItemDetails().activeAttribute ===
+                        attribute.id
                       }
                       small
                     />
@@ -73,20 +86,22 @@ export class CartOverlayItem extends PureComponent {
               </div>
             </div>
           )}
-          {color.length !== 0 && (
+          {this.getCartItemDetails().color.length !== 0 && (
             <div className='cart-overlay-item-details-attribute'>
               <p className='cart-overlay-item-details-attribute-text'>
-                {color[0].name}:
+                {this.getCartItemDetails().color[0].name}:
               </p>
               <div className='cart-overlay-item-details-attribute-items'>
-                {color[0].items.map((color) => (
+                {this.getCartItemDetails().color[0].items.map((color) => (
                   <div
                     key={color.id}
                     className='cart-overlay-item-details-attribute-items-item'
                   >
                     <ColorButton
                       color={color.value}
-                      active={this.props.cartItem.activeColor === color.id}
+                      active={
+                        this.getCartItemDetails().activeColor === color.id
+                      }
                       small
                     />
                   </div>
@@ -101,7 +116,7 @@ export class CartOverlayItem extends PureComponent {
             text='+'
             onClick={() => this.props.addQuantity(this.props.cartItem)}
           />
-          <p>{this.props.cartItem.qty}</p>
+          <p>{this.getCartItemDetails().qty}</p>
           <CountButton
             small
             text='-'
@@ -110,14 +125,14 @@ export class CartOverlayItem extends PureComponent {
         </div>
         <div className='cart-overlay-item-imageContainer'>
           <Link
-            to={`/product/${this.props.cartItem.id}`}
+            to={`/product/${this.getCartItemDetails().id}`}
             onClick={() => {
               this.props.closeCart();
             }}
           >
             <img
-              src={this.props.cartItem.gallery[0]}
-              alt={this.props.cartItem.name}
+              src={this.getCartItemDetails().gallery[0]}
+              alt={this.getCartItemDetails().name}
               className='cart-overlay-item-imageContainer-img'
             />
           </Link>

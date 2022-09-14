@@ -6,11 +6,11 @@ import CurrencyDropdown from '../CurrencyDropdown';
 
 describe('<CurrencyDropdown /> spec', () => {
   it('renders the empty component', () => {
-    const container = render(
+    const { children } = render(
       <Provider store={store}>
         <CurrencyDropdown />
       </Provider>
     );
-    expect(container.children).toMatchSnapshot();
+    expect(children).toMatchSnapshot();
   });
 });
