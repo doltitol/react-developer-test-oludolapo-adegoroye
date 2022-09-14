@@ -1,35 +1,10 @@
 import { gql } from '@apollo/client';
 
-const ALL_CATEGORIES = gql`
+
+const CATEGORIES = gql`
   query Categories {
     categories {
       name
-      products {
-        id
-        name
-        inStock
-        gallery
-        description
-        category
-        attributes {
-          id
-          name
-          type
-          items {
-            displayValue
-            value
-            id
-          }
-        }
-        prices {
-          currency {
-            label
-            symbol
-          }
-          amount
-        }
-        brand
-      }
     }
   }
 `;
@@ -40,34 +15,10 @@ const CATEGORY = gql`
       name
       products {
         id
-        name
-        inStock
-        gallery
-        description
-        category
-        attributes {
-          id
-          name
-          type
-          items {
-            displayValue
-            value
-            id
-          }
-        }
-        prices {
-          currency {
-            label
-            symbol
-          }
-          amount
-        }
-        brand
       }
     }
   }
 `;
-
 const PRODUCT = gql`
   query Product($productId: String!) {
     product(id: $productId) {
@@ -77,24 +28,21 @@ const PRODUCT = gql`
       gallery
       description
       category
-      attributes {
-        id
-        name
-        type
-        items {
-          displayValue
-          value
-          id
-        }
-      }
+      brand
       prices {
         currency {
-          label
           symbol
         }
         amount
       }
-      brand
+      attributes {
+        id
+        items {
+          value
+          id
+        }
+        name
+      }
     }
   }
 `;
@@ -110,7 +58,7 @@ const CURRENCIES = gql`
 
 export const allResolvers = {
   CATEGORY,
+  CATEGORIES,
   CURRENCIES,
-  ALL_CATEGORIES,
   PRODUCT,
 };

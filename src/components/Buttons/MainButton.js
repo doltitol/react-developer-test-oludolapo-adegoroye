@@ -6,6 +6,31 @@ export class MainButton extends PureComponent {
     super(props);
     this.state = {};
   }
+  getBorder = () => {
+    if (this.props.outline) {
+      return '1px solid #1D1F22';
+    } else if (this.props.disabled) {
+      return 'rgba(94, 206, 123, 0.6)';
+    } else {
+      return '1px solid #5ECE7B';
+    }
+  };
+  getColor = () => {
+    if (this.props.outline) {
+      return '#1D1F22';
+    } else {
+      return '#FFFFFF';
+    }
+  };
+  getBackground = () => {
+    if (this.props.outline) {
+      return 'transparent';
+    } else if (this.props.disabled) {
+      return 'rgba(94, 206, 123, 0.6)';
+    } else {
+      return '#5ECE7B';
+    }
+  };
   render() {
     return (
       <button
@@ -13,21 +38,16 @@ export class MainButton extends PureComponent {
         data-testid='main-button'
         style={{
           width: this.props.width,
-          border: this.props.outline
-            ? '1px solid #1D1F22'
-            : this.props.disabled
-            ? 'rgba(94, 206, 123, 0.6)'
-            : '1px solid #5ECE7B',
+          border: this.getBorder(),
           height: this.props.height,
-          color: this.props.outline ? '#1D1F22' : '#FFFFFF',
-          background: this.props.outline
-            ? 'transparent'
-            : this.props.disabled
-            ? 'rgba(94, 206, 123, 0.6)'
-            : '#5ECE7B',
+          color: this.getColor(),
+          background: this.getBackground(),
+          cursor: this.props.cursor,
         }}
         onClick={this.props.onClick}
         disabled={this.props.disabled}
+        onMouseOver={this.props.onMouseOver}
+        onMouseLeave={this.props.onMouseLeave}
       >
         {this.props.text}
       </button>

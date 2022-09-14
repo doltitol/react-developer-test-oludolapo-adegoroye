@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export class CartOverlay extends PureComponent {
-  render() {
-    const total = this.props.cartItems.reduce(
+  getTotal = () => {
+    const cartTotal = this.props.cartItems.reduce(
       (acc, cur) =>
         acc +
         cur.prices.filter(
@@ -17,6 +17,9 @@ export class CartOverlay extends PureComponent {
           cur.qty,
       0
     );
+    return { total: cartTotal };
+  };
+  render() {
     return (
       <div data-testid='cart-overlay'>
         <div
@@ -42,7 +45,7 @@ export class CartOverlay extends PureComponent {
             <p className='cart-overlay-container-total-text'>Total</p>
             <p className='cart-overlay-container-total-pricing'>
               {this.props.currency}
-              {numberCommaFormatter(total.toFixed(2))}
+              {numberCommaFormatter(this.getTotal().total.toFixed(2))}
             </p>
           </div>
           <div className='cart-overlay-container-buttons'>

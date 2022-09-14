@@ -10,52 +10,66 @@ import CartImageSlider from '../CartImageSlider/CartImageSlider';
 import { numberCommaFormatter } from '../../util';
 
 export class CartItem extends PureComponent {
-  render() {
+  getCartItemDetails = () => {
+    const { id, brand, name, activeAttribute, activeColor, qty, gallery } =
+      this.props.cartItem;
     const pricing = this.props.cartItem.prices.filter(
       (price) => price.currency.symbol === this.props.currency
     );
     const color = this.props.cartItem.attributes.filter(
       (attr) => attr.id === 'Color'
-    )
-      ? this.props.cartItem.attributes.filter((attr) => attr.id === 'Color')
-      : null;
+    );
     const size = this.props.cartItem.attributes.filter(
       (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-    )
-      ? this.props.cartItem.attributes.filter((attr) => attr.id !== 'Color')
-      : null;
+    );
+    return {
+      pricing,
+      color: color ? color : null,
+      size: size ? size : null,
+      id,
+      brand,
+      name,
+      activeAttribute,
+      activeColor,
+      qty,
+      gallery,
+    };
+  };
+  render() {
     return (
       <div className='cart-item' data-testid='cart-item'>
         <div className='cart-item-details'>
           <Link
-            to={`/product/${this.props.cartItem.id}`}
+            to={`/product/${this.getCartItemDetails().id}`}
             onClick={() => {
               this.props.closeCart();
             }}
           >
             <p className='cart-item-details-brand'>
-              {this.props.cartItem.brand}
+              {this.getCartItemDetails().brand}
             </p>
           </Link>
           <Link
-            to={`/product/${this.props.cartItem.id}`}
+            to={`/product/${this.getCartItemDetails().id}`}
             onClick={() => {
               this.props.closeCart();
             }}
           >
-            <p className='cart-item-details-name'>{this.props.cartItem.name}</p>
+            <p className='cart-item-details-name'>
+              {this.getCartItemDetails().name}
+            </p>
           </Link>
           <p className='cart-item-details-pricing'>
-            {pricing[0].currency.symbol}{' '}
-            {numberCommaFormatter(pricing[0].amount)}
+            {this.getCartItemDetails().pricing[0].currency.symbol}{' '}
+            {numberCommaFormatter(this.getCartItemDetails().pricing[0].amount)}
           </p>
-          {size.length !== 0 && (
+          {this.getCartItemDetails().size.length !== 0 && (
             <div className='cart-item-details-attribute'>
               <p className='cart-item-details-attribute-text'>
-                {size[0].name}:
+                {this.getCartItemDetails().size[0].name}:
               </p>
               <div className='cart-item-details-attribute-items'>
-                {size[0].items.map((attribute) => (
+                {this.getCartItemDetails().size[0].items.map((attribute) => (
                   <div
                     key={attribute.id}
                     className='cart-item-details-attribute-items-item'
@@ -63,7 +77,8 @@ export class CartItem extends PureComponent {
                     <AttributeButton
                       text={attribute.value}
                       active={
-                        this.props.cartItem.activeAttribute === attribute.id
+                        this.getCartItemDetails().activeAttribute ===
+                        attribute.id
                       }
                     />
                   </div>
@@ -71,20 +86,22 @@ export class CartItem extends PureComponent {
               </div>
             </div>
           )}
-          {color.length !== 0 && (
+          {this.getCartItemDetails().color.length !== 0 && (
             <div className='cart-item-details-attribute'>
               <p className='cart-item-details-attribute-text'>
-                {color[0].name}:
+                {this.getCartItemDetails().color[0].name}:
               </p>
               <div className='cart-item-details-attribute-items'>
-                {color[0].items.map((color) => (
+                {this.getCartItemDetails().color[0].items.map((color) => (
                   <div
                     key={color.id}
                     className='cart-item-details-attribute-items-item'
                   >
                     <ColorButton
                       color={color.value}
-                      active={this.props.cartItem.activeColor === color.id}
+                      active={
+                        this.getCartItemDetails().activeColor === color.id
+                      }
                     />
                   </div>
                 ))}
@@ -98,14 +115,16 @@ export class CartItem extends PureComponent {
             text='+'
             onClick={() => this.props.addQuantity(this.props.cartItem)}
           />
-          <p className='cart-item-buttons-text'>{this.props.cartItem.qty}</p>
+          <p className='cart-item-buttons-text'>
+            {this.getCartItemDetails().qty}
+          </p>
           <CountButton
             text='-'
             onClick={() => this.props.removeQuantity(this.props.cartItem)}
           />
         </div>
         <div className='cart-item-Image'>
-          <CartImageSlider gallery={this.props.cartItem.gallery} />
+          <CartImageSlider gallery={this.getCartItemDetails().gallery} />
         </div>
       </div>
     );

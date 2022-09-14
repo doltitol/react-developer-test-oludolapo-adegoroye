@@ -3,65 +3,74 @@ import { Icons } from '../../assets/images/Icons';
 import { numberCommaFormatter } from '../../util';
 import './productitem.style.scss';
 import { Link } from 'react-router-dom';
-import { client } from '../../config/apolloClient';
-import { allResolvers } from '../../graphql/resolvers';
 import { connect } from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
+import { useGQLQuery } from '../../graphql/useGQLQuery';
 
 export class ProductItem extends PureComponent {
   state = {
     showAddToCart: false,
     product: {},
   };
-  async getProduct() {
+  getProduct = () => {
     const id = this.props.productId;
-    return await client.query({
-      query: allResolvers.PRODUCT,
-      variables: {
-        productId: id,
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-  componentDidMount() {
-    this.getProduct().then((result) => {
+    useGQLQuery.productItem(id).then((result) => {
       this.setState((prevState) => {
         return {
           product: prevState.product === result ? prevState.product : result,
         };
       });
     });
+  };
+  checkProducts = () => {
+    if (this.state.product?.data) {
+      const product = this.state.product?.data?.product;
+      const attributeSize = product.attributes.filter(
+        (attr) => attr.id !== 'Color'
+      );
+      const attributeColor = product.attributes.filter(
+        (attr) => attr.id === 'Color'
+      );
+      const newColor =
+        attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
+      const newSize =
+        attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
+      return {
+        activeSize: newSize,
+        activeColor: newColor,
+        product,
+      };
+    }
+  };
+  checkInstock = () => {
+    const inStock = this.checkProducts().product.inStock;
+    if (inStock) {
+      return '#1D1F22';
+    } else {
+      return '#8D8F9A';
+    }
+  };
+  handleAddToCart = () => {
+    const inStock = this.checkProducts().product.inStock;
+    if (inStock) {
+      return this.props.addToCart(
+        this.checkProducts().product,
+        this.checkProducts().activeColor,
+        this.checkProducts().activeSize
+      );
+    } else {
+      return null;
+    }
+  };
+  componentDidMount() {
+    this.getProduct();
   }
   componentDidUpdate(prevProps) {
     if (this.props.productId !== prevProps.productId) {
-      this.getProduct().then((result) =>
-        this.setState((prevState) => {
-          return {
-            product: prevState.product === result ? prevState.product : result,
-          };
-        })
-      );
+      this.getProduct();
     }
   }
   render() {
-    const activeAttribute = this.state.product?.data
-      ? this.state.product?.data.product.attributes.filter(
-          (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-        ).length !== 0
-        ? this.state.product?.data.product.attributes.filter(
-            (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-          )[0].items[0].id
-        : ''
-      : null;
-    const activeColor = this.state.product?.data
-      ? this.state.product?.data.product.attributes.filter(
-          (attr) => attr.id === 'Color'
-        ).length !== 0
-        ? this.state.product?.data.product.attributes.filter(
-            (attr) => attr.id === 'Color'
-          )[0].items[0].id
-        : ''
-      : null;
     return (
       <>
         {this.state.product?.data && (
@@ -70,14 +79,14 @@ export class ProductItem extends PureComponent {
             onMouseOver={() => this.setState({ showAddToCart: true })}
             onMouseLeave={() => this.setState({ showAddToCart: false })}
           >
-            <Link to={`/product/${this.state.product.data.product.id}`}>
+            <Link to={`/product/${this.checkProducts().product.id}`}>
               <div className='product-item-image'>
                 <img
-                  src={this.state.product.data.product.gallery[0]}
-                  alt={this.state.product.data.product.name}
+                  src={this.checkProducts().product.gallery[0]}
+                  alt={this.checkProducts().product.name}
                   className='product-item-image-img'
                 />
-                {!this.state.product.data.product.inStock && (
+                {!this.checkProducts().product.inStock && (
                   <div className='product-item-image-screen'>
                     <p className='product-item-image-screen-text'>
                       out of stock
@@ -90,46 +99,32 @@ export class ProductItem extends PureComponent {
               <Icons.AddToCart
                 size={80}
                 color={
-                  !this.state.product.data.product.inStock
+                  !this.checkProducts().product.inStock
                     ? 'rgba(94, 206, 123, 0.8)'
                     : '#5ECE7B'
                 }
                 className='product-item-addtocart'
-                onClick={() =>
-                  this.state.product.data.product.inStock
-                    ? this.props.addToCart(
-                        this.state.product.data.product,
-                        activeColor,
-                        activeAttribute
-                      )
-                    : null
-                }
+                onClick={() => this.handleAddToCart()}
               />
             )}
-            <Link to={`/product/${this.state.product.data.product.id}`}>
+            <Link to={`/product/${this.checkProducts().product.id}`}>
               <p
                 className='product-item-name'
-                style={{
-                  color: this.state.product.data.product.inStock
-                    ? '#1D1F22'
-                    : '#8D8F9A',
-                }}
+                style={{ color: this.checkInstock() }}
               >
-                {this.state.product.data.product.brand} -{' '}
-                {this.state.product.data.product.name}
+                {this.checkProducts().product.brand} -{' '}
+                {this.checkProducts().product.name}
               </p>
             </Link>
-            {this.state.product.data.product.prices
-              .filter((price) => price.currency.symbol === this.props.currency)
+            {this.checkProducts()
+              .product.prices.filter(
+                (price) => price.currency.symbol === this.props.currency
+              )
               .map((item) => (
                 <p
                   className='product-item-price'
                   key={item.currency.symbol}
-                  style={{
-                    color: this.state.product.data.product.inStock
-                      ? '#1D1F22'
-                      : '#8D8F9A',
-                  }}
+                  style={{ color: this.checkInstock() }}
                 >
                   {item.currency.symbol} {numberCommaFormatter(item.amount)}
                 </p>

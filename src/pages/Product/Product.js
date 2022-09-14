@@ -8,8 +8,7 @@ import MainButton from '../../components/Buttons/MainButton';
 import { Interweave } from 'interweave';
 import { connect } from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
-import { client } from '../../config/apolloClient';
-import { allResolvers } from '../../graphql/resolvers';
+import { useGQLQuery } from '../../graphql/useGQLQuery';
 
 function getParams(Component) {
   return (props) => <Component {...props} params={useParams()} />;
@@ -20,19 +19,11 @@ export class Product extends PureComponent {
     activeAttribute: '',
     activeColor: '',
     product: {},
+    showTooltip: false,
   };
-  async getProduct() {
+  getProduct = () => {
     const { id } = this.props.params;
-    return await client.query({
-      query: allResolvers.PRODUCT,
-      variables: {
-        productId: id,
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-  componentDidMount() {
-    this.getProduct().then((result) => {
+    useGQLQuery.productItem(id).then((result) => {
       this.setState((prevState) => {
         return {
           product: prevState.product === result ? prevState.product : result,
@@ -40,19 +31,62 @@ export class Product extends PureComponent {
         };
       });
     });
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.params.id !== prevProps.params.id) {
-      this.getProduct().then((result) =>
-        this.setState((prevState) => {
-          return {
-            product: prevState.product === result ? prevState.product : result,
-            thumbImg: '',
-          };
-        })
+  };
+  checkProducts = () => {
+    if (this.state.product?.data) {
+      const product = this.state.product?.data?.product;
+      const attributeSize = product.attributes.filter(
+        (attr) => attr.id !== 'Color'
       );
+      const attributeColor = product.attributes.filter(
+        (attr) => attr.id === 'Color'
+      );
+      const newColor =
+        attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
+      const newSize =
+        attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
+      return {
+        activeSize: newSize,
+        activeColor: newColor,
+        product,
+        gallery: product.gallery,
+        brand: product.brand,
+        attributes: product.attributes,
+        name: product.name,
+        price: product.prices,
+      };
     }
-  }
+  };
+  handleAddToCart = () => {
+    const inStock = this.checkProducts().product.inStock;
+    const activeColor =
+      this.state.activeColor === ''
+        ? this.checkProducts().activeColor
+        : this.state.activeColor;
+    const activeAttribute =
+      this.state.activeAttribute === ''
+        ? this.checkProducts().activeAttribute
+        : this.state.activeAttribute;
+    if (
+      inStock &&
+      (this.state.activeColor !== '' || this.state.activeAttribute !== '')
+    ) {
+      return this.props.addToCart(
+        this.checkProducts().product,
+        activeColor,
+        activeAttribute
+      );
+    } else {
+      return null;
+    }
+  };
+  handleTooltip = () => {
+    if (this.state.activeAttribute === '' && this.state.activeColor === '') {
+      this.setState({
+        showTooltip: !this.state.showTooltip,
+      });
+    }
+  };
   changeImg = (img) => {
     this.setState((prevState) => {
       return {
@@ -76,59 +110,46 @@ export class Product extends PureComponent {
       };
     });
   };
+  componentDidMount() {
+    this.getProduct();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.params.id !== prevProps.params.id) {
+      this.getProduct();
+    }
+  }
   render() {
-    const activeAttribute = this.state.product?.data
-      ? this.state.product?.data.product.attributes.filter(
-          (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-        ).length !== 0
-        ? this.state.product?.data.product.attributes.filter(
-            (attr) => attr.id === 'Size' || attr.id === 'Capacity'
-          )[0].items[0].id
-        : ''
-      : null;
-    const activeColor = this.state.product?.data
-      ? this.state.product?.data.product.attributes.filter(
-          (attr) => attr.id === 'Color'
-        ).length !== 0
-        ? this.state.product?.data.product.attributes.filter(
-            (attr) => attr.id === 'Color'
-          )[0].items[0].id
-        : ''
-      : null;
-
     return (
       <div className='product' data-testid='product'>
         {this.state.product?.data && (
           <>
             <div className='product-imageContainer'>
               <div className='product-imageContainer-thumbnailContainer'>
-                {this.state.product?.data.product.gallery.map(
-                  (image, index) => (
-                    <div
-                      className='product-imageContainer-thumbnailContainer-thumb'
-                      key={index}
-                      onClick={() => this.changeImg(image)}
-                    >
-                      <img
-                        src={image}
-                        alt='productImage'
-                        className='product-imageContainer-thumbnailContainer-thumb-img'
-                      />
-                    </div>
-                  )
-                )}
+                {this.checkProducts().gallery.map((image, index) => (
+                  <div
+                    className='product-imageContainer-thumbnailContainer-thumb'
+                    key={index}
+                    onClick={() => this.changeImg(image)}
+                  >
+                    <img
+                      src={image}
+                      alt='productImage'
+                      className='product-imageContainer-thumbnailContainer-thumb-img'
+                    />
+                  </div>
+                ))}
               </div>
               <div className='product-imageContainer-image'>
                 <img
                   src={
                     this.state.thumbImg !== ''
                       ? this.state.thumbImg
-                      : this.state.product?.data.product.gallery[0]
+                      : this.checkProducts().gallery[0]
                   }
                   alt='productImage'
                   className='product-imageContainer-image-img'
                 />
-                {!this.state.product.data.product.inStock && (
+                {!this.checkProducts().product.inStock && (
                   <div className='product-imageContainer-image-screen'>
                     <p className='product-imageContainer-image-screen-text'>
                       out of stock
@@ -139,12 +160,12 @@ export class Product extends PureComponent {
             </div>
             <div className='product-detailsContainer'>
               <div className='product-detailsContainer-heading'>
-                <h1>{this.state.product.data.product.brand}</h1>
-                <h2>{this.state.product.data.product.name}</h2>
+                <h1>{this.checkProducts().brand}</h1>
+                <h2>{this.checkProducts().name}</h2>
               </div>
               <div className='product-detailsContainer-attributes'>
-                {this.state.product.data.product.attributes
-                  .filter(
+                {this.checkProducts()
+                  .attributes.filter(
                     (attr) => attr.id === 'Size' || attr.id === 'Capacity'
                   )
                   .map((attribute) => (
@@ -162,9 +183,7 @@ export class Product extends PureComponent {
                             <AttributeButton
                               text={item.value}
                               active={
-                                this.state.activeAttribute === '' && index === 0
-                                  ? true
-                                  : this.state.activeAttribute === item.id
+                                this.state.activeAttribute === item.id
                                   ? true
                                   : false
                               }
@@ -176,8 +195,8 @@ export class Product extends PureComponent {
                     </div>
                   ))}
 
-                {this.state.product.data.product.attributes
-                  .filter((attr) => attr.id === 'Color')
+                {this.checkProducts()
+                  .attributes.filter((attr) => attr.id === 'Color')
                   .map((attribute) => (
                     <div
                       className='product-detailsContainer-attributes-color'
@@ -193,9 +212,7 @@ export class Product extends PureComponent {
                             <ColorButton
                               color={item.value}
                               active={
-                                this.state.activeColor === '' && index === 0
-                                  ? true
-                                  : this.state.activeColor === item.id
+                                this.state.activeColor === item.id
                                   ? true
                                   : false
                               }
@@ -209,12 +226,12 @@ export class Product extends PureComponent {
               </div>
               <div className='product-detailsContainer-pricing'>
                 <h3>Price:</h3>
-                {this.state.product.data.product.prices
-                  .filter(
+                {this.checkProducts()
+                  .price.filter(
                     (price) => price.currency.symbol === this.props.currency
                   )
                   .map((price) => (
-                    <p key={price.currency.label}>
+                    <p key={price.currency.symbol}>
                       {price.currency.symbol}{' '}
                       {numberCommaFormatter(price.amount)}
                     </p>
@@ -225,21 +242,23 @@ export class Product extends PureComponent {
                   text='add to cart'
                   width='292px'
                   height='52px'
-                  disabled={!this.state.product.data.product.inStock}
-                  onClick={() =>
-                    this.state.product.data.product.inStock
-                      ? this.props.addToCart(
-                          this.state.product.data.product,
-                          this.state.activeColor === ''
-                            ? activeColor
-                            : this.state.activeColor,
-                          this.state.activeAttribute === ''
-                            ? activeAttribute
-                            : this.state.activeAttribute
-                        )
-                      : null
+                  disabled={!this.state.product?.data?.product.inStock}
+                  onClick={() => this.handleAddToCart()}
+                  cursor={
+                    this.state.activeAttribute === '' &&
+                    this.state.activeColor === ''
+                      ? 'not-allowed'
+                      : 'pointer'
                   }
+                  onMouseOver={() => this.handleTooltip()}
+                  onMouseLeave={() => this.handleTooltip()}
                 />
+                {this.state.showTooltip && (
+                  <span class='tooltiptext'>
+                    Select an attribute to add item to the cart
+                  </span>
+                )}
+
                 <div className='product-detailsContainer-footer-desc'>
                   <Interweave
                     content={this.state.product.data.product.description}

@@ -2,27 +2,29 @@ import React, { PureComponent } from 'react';
 import './currencyoverlay.style.scss';
 import { connect } from 'react-redux';
 import { changeCurrency } from '../../redux/actions/cartActions';
-import { client } from '../../config/apolloClient';
-import { allResolvers } from '../../graphql/resolvers';
+import { useGQLQuery } from '../../graphql/useGQLQuery';
 
 export class CurrencyDropdown extends PureComponent {
   state = {
     currencies: {},
   };
-  async getCurrencies() {
-    return await client.query({
-      query: allResolvers.CURRENCIES,
-    });
-  }
+
   handleCurrency = (currency) => {
     this.props.handleCurrency(currency);
   };
-  componentDidMount() {
-    this.getCurrencies().then((result) =>
+  getCurrencies = () => {
+    useGQLQuery.currencies().then((result) =>
       this.setState({
         currencies: result,
       })
     );
+  };
+  getCurrencyDetails = () => {
+    const currencies = this.state.currencies?.data.currencies;
+    return { currencies };
+  };
+  componentDidMount() {
+    this.getCurrencies();
   }
   render() {
     return (
@@ -30,7 +32,7 @@ export class CurrencyDropdown extends PureComponent {
         {this.state.currencies?.data && (
           <div className='currency-dropdown'>
             <ul className='currency-dropdown-list' data-testid='currency'>
-              {this.state.currencies?.data.currencies.map((currency) => (
+              {this.getCurrencyDetails().currencies.map((currency) => (
                 <li
                   key={currency.label}
                   className='currency-dropdown-list-item'

@@ -2,10 +2,9 @@ import React, { PureComponent } from 'react';
 import MainButton from '../../components/Buttons/MainButton';
 import ProductItem from '../../components/ProductItem/ProductItem';
 import './home.style.scss';
-import { client } from '../../config/apolloClient';
 import { connect } from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
-import { allResolvers } from '../../graphql/resolvers';
+import { useGQLQuery } from '../../graphql/useGQLQuery';
 
 export class Home extends PureComponent {
   constructor(props) {
@@ -15,38 +14,33 @@ export class Home extends PureComponent {
       page: {},
     };
   }
-  async getCategory() {
-    const cat = this.props.category;
-    return await client.query({
-      query: allResolvers.CATEGORY,
-      variables: {
-        input: {
-          title: cat,
-        },
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-  componentDidMount() {
-    this.getCategory().then((result) => {
+
+  getCategory = () => {
+    const category = this.props.category;
+    useGQLQuery.category(category).then((result) => {
       this.setState((prevState) => {
         return {
           page: prevState.page === result ? prevState.page : result,
         };
       });
     });
+  };
+
+  getProducts = () => {
+    if (this.state.page?.data) {
+      const { products } = this.state.page?.data.category;
+      return products;
+    }
+  };
+  componentDidMount() {
+    this.getCategory();
   }
   componentDidUpdate(prevProps) {
     if (this.props.category !== prevProps.category) {
-      this.getCategory().then((result) =>
-        this.setState((prevState) => {
-          return {
-            page: prevState.page === result ? prevState.page : result,
-          };
-        })
-      );
+      this.getCategory();
     }
   }
+
   handlePagination = (catLen) => {
     this.setState((prevState) => {
       return {
@@ -63,26 +57,22 @@ export class Home extends PureComponent {
       <>
         {this.state.page?.data && (
           <div className='home'>
-            <h1 className='home-heading'>
-              {this.state.page?.data.category.name}
-            </h1>
+            <h1 className='home-heading'>{this.props.category}</h1>
             <div className='home-product'>
-              {this.state.page?.data.category.products
+              {this.getProducts()
                 .slice(0, this.state.pagination)
                 .map((product) => (
                   <ProductItem productId={product.id} key={product.id} />
                 ))}
             </div>
             <div className='home-loadbutton'>
-              {this.state.page.data.category.products.length > 6 && (
+              {this.getProducts().length > 6 && (
                 <MainButton
                   text='Load More'
                   width='200px'
                   height='53px'
                   onClick={() =>
-                    this.handlePagination(
-                      this.state.page.data.category.products.length
-                    )
+                    this.handlePagination(this.getProducts().length)
                   }
                   disabled={false}
                 />
@@ -94,12 +84,6 @@ export class Home extends PureComponent {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    currency: state.cart.currency,
-    cartQuantity: state.cart.cartQuantity,
-  };
-};
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product, activeAttribute, activeColor) => {
@@ -107,4 +91,4 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapDispatchToProps)(Home);

@@ -8,7 +8,7 @@ import CartItem from '../../components/CartItem/CartItem';
 
 
 export class Cart extends PureComponent {
-  render() {
+  getTotal = () => {
     const tax = 21;
     const total = this.props.cartItems.reduce(
       (acc, cur) =>
@@ -19,8 +19,14 @@ export class Cart extends PureComponent {
           cur.qty,
       0
     );
-    const taxAmount = total * (21 / 100);
-
+    const taxAmount = total * (tax / 100);
+    return {
+      tax,
+      taxAmount,
+      total,
+    };
+  };
+  render() {
     return (
       <div className='cart' ref={this.cartRef}>
         <h1 className='cart-heading'>cart</h1>
@@ -37,12 +43,12 @@ export class Cart extends PureComponent {
         <div className='cart-cartTotal'>
           <div className='cart-cartTotal-item'>
             <div className='cart-cartTotal-item-heading'>
-              <p>Tax{tax}%:</p>
+              <p>Tax {this.getTotal().tax}%:</p>
             </div>
             <div className='cart-cartTotal-item-amount'>
               <p>
                 {this.props.currency}
-                {numberCommaFormatter(taxAmount.toFixed(2))}
+                {numberCommaFormatter(this.getTotal().taxAmount.toFixed(2))}
               </p>
             </div>
           </div>
@@ -61,7 +67,7 @@ export class Cart extends PureComponent {
             <div className='cart-cartTotal-item-amount'>
               <p>
                 {this.props.currency}
-                {numberCommaFormatter(total.toFixed(2))}
+                {numberCommaFormatter(this.getTotal().total.toFixed(2))}
               </p>
             </div>
           </div>
