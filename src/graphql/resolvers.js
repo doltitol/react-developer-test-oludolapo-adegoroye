@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client';
-
+import {gql} from '@apollo/client';
 
 const CATEGORIES = gql`
   query Categories {
@@ -15,6 +14,26 @@ const CATEGORY = gql`
       name
       products {
         id
+        name
+        inStock
+        gallery
+        description
+        category
+        brand
+        prices {
+          currency {
+            symbol
+          }
+          amount
+        }
+        attributes {
+          id
+          items {
+            value
+            id
+          }
+          name
+        }
       }
     }
   }

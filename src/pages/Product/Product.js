@@ -1,29 +1,31 @@
 import React, { PureComponent } from 'react';
 import './product.style.scss';
-import { useParams } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import AttributeButton from '../../components/Buttons/AttributeButton';
 import ColorButton from '../../components/Buttons/ColorButton';
-import { numberCommaFormatter } from '../../util';
+import {numberCommaFormatter} from '../../util';
 import MainButton from '../../components/Buttons/MainButton';
-import { Interweave } from 'interweave';
-import { connect } from 'react-redux';
-import { addToCart } from '../../redux/actions/cartActions';
-import { useGQLQuery } from '../../graphql/useGQLQuery';
+import {Interweave} from 'interweave';
+import {connect} from 'react-redux';
+import {addToCart} from '../../redux/actions/cartActions';
+import {useGQLQuery} from '../../graphql/useGQLQuery';
 
 function getParams(Component) {
-  return (props) => <Component {...props} params={useParams()} />;
+  return (props) => <Component {...props} params={useLocation()} />;
 }
 export class Product extends PureComponent {
-  state = {
-    thumbImg: '',
-    activeAttribute: '',
-    activeColor: '',
-    product: {},
-    showTooltip: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      thumbImg: '',
+      activeAttribute: props.params.state.activeSize,
+      activeColor: props.params.state.activeColor,
+      product: {},
+    };
+  }
   getProduct = () => {
-    const { id } = this.props.params;
-    useGQLQuery.productItem(id).then((result) => {
+    const {id} = this.props.params.state;
+    useGQLQuery.product(id).then((result) => {
       this.setState((prevState) => {
         return {
           product: prevState.product === result ? prevState.product : result,
@@ -35,19 +37,7 @@ export class Product extends PureComponent {
   checkProducts = () => {
     if (this.state.product?.data) {
       const product = this.state.product?.data?.product;
-      const attributeSize = product.attributes.filter(
-        (attr) => attr.id !== 'Color'
-      );
-      const attributeColor = product.attributes.filter(
-        (attr) => attr.id === 'Color'
-      );
-      const newColor =
-        attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
-      const newSize =
-        attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
       return {
-        activeSize: newSize,
-        activeColor: newColor,
         product,
         gallery: product.gallery,
         brand: product.brand,
@@ -59,32 +49,14 @@ export class Product extends PureComponent {
   };
   handleAddToCart = () => {
     const inStock = this.checkProducts().product.inStock;
-    const activeColor =
-      this.state.activeColor === ''
-        ? this.checkProducts().activeColor
-        : this.state.activeColor;
-    const activeAttribute =
-      this.state.activeAttribute === ''
-        ? this.checkProducts().activeAttribute
-        : this.state.activeAttribute;
-    if (
-      inStock &&
-      (this.state.activeColor !== '' || this.state.activeAttribute !== '')
-    ) {
+    if (inStock) {
       return this.props.addToCart(
         this.checkProducts().product,
-        activeColor,
-        activeAttribute
+        this.state.activeColor,
+        this.state.activeAttribute
       );
     } else {
       return null;
-    }
-  };
-  handleTooltip = () => {
-    if (this.state.activeAttribute === '' && this.state.activeColor === '') {
-      this.setState({
-        showTooltip: !this.state.showTooltip,
-      });
     }
   };
   changeImg = (img) => {
@@ -244,20 +216,7 @@ export class Product extends PureComponent {
                   height='52px'
                   disabled={!this.state.product?.data?.product.inStock}
                   onClick={() => this.handleAddToCart()}
-                  cursor={
-                    this.state.activeAttribute === '' &&
-                    this.state.activeColor === ''
-                      ? 'not-allowed'
-                      : 'pointer'
-                  }
-                  onMouseOver={() => this.handleTooltip()}
-                  onMouseLeave={() => this.handleTooltip()}
                 />
-                {this.state.showTooltip && (
-                  <span class='tooltiptext'>
-                    Select an attribute to add item to the cart
-                  </span>
-                )}
 
                 <div className='product-detailsContainer-footer-desc'>
                   <Interweave

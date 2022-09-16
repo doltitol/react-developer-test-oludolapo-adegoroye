@@ -18,10 +18,8 @@ export class Home extends PureComponent {
   getCategory = () => {
     const category = this.props.category;
     useGQLQuery.category(category).then((result) => {
-      this.setState((prevState) => {
-        return {
-          page: prevState.page === result ? prevState.page : result,
-        };
+      this.setState( {
+      page: result,
       });
     });
   };
@@ -53,35 +51,33 @@ export class Home extends PureComponent {
   };
 
   render() {
-    return (
-      <>
-        {this.state.page?.data && (
-          <div className='home'>
-            <h1 className='home-heading'>{this.props.category}</h1>
-            <div className='home-product'>
-              {this.getProducts()
-                .slice(0, this.state.pagination)
-                .map((product) => (
-                  <ProductItem productId={product.id} key={product.id} />
-                ))}
-            </div>
-            <div className='home-loadbutton'>
-              {this.getProducts().length > 6 && (
-                <MainButton
-                  text='Load More'
-                  width='200px'
-                  height='53px'
-                  onClick={() =>
-                    this.handlePagination(this.getProducts().length)
-                  }
-                  disabled={false}
-                />
-              )}
-            </div>
+  return (
+    <>
+      {this.state.page?.data && (
+        <div className='home'>
+          <h1 className='home-heading'>{this.props.category}</h1>
+          <div className='home-product'>
+            {this.getProducts()
+              .slice(0, this.state.pagination)
+              .map((product) => (
+                <ProductItem product={product} key={product.id} />
+              ))}
           </div>
-        )}
-      </>
-    );
+          <div className='home-loadbutton'>
+            {this.getProducts().length > 6 && (
+              <MainButton
+                text='Load More'
+                width='200px'
+                height='53px'
+                onClick={() => this.handlePagination(this.getProducts().length)}
+                disabled={false}
+              />
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
   }
 }
 const mapDispatchToProps = (dispatch) => {
