@@ -10,17 +10,27 @@ import { addQuantity, removeQuantity } from '../../redux/actions/cartActions';
 
 export class CartOverlayItem extends PureComponent {
   getCartItemDetails = () => {
-    const { id, brand, name, activeAttribute, activeColor, qty, gallery } =
+    const { id, brand, name, activeAttribute, activeColor, qty, gallery, attributes, prices } =
       this.props.cartItem;
-    const pricing = this.props.cartItem.prices.filter(
+    const pricing = prices.filter(
       (price) => price.currency.symbol === this.props.currency
     );
-    const color = this.props.cartItem.attributes.filter(
+    const color = attributes.filter(
       (attr) => attr.id === 'Color'
     );
-    const size = this.props.cartItem.attributes.filter(
+    const size = attributes.filter(
       (attr) => attr.id === 'Size' || attr.id === 'Capacity'
     );
+     const attributeSize = attributes.filter(
+      (attr) => attr.id !== 'Color'
+    );
+    const attributeColor = attributes.filter(
+      (attr) => attr.id === 'Color'
+    );
+    const productColor =
+      attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
+    const productSize =
+      attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
     return {
       pricing,
       color: color ? color : null,
@@ -32,6 +42,8 @@ export class CartOverlayItem extends PureComponent {
       activeColor,
       qty,
       gallery,
+      productSize,
+      productColor,
     };
   };
   render() {
@@ -40,6 +52,11 @@ export class CartOverlayItem extends PureComponent {
         <div className='cart-overlay-item-details'>
           <Link
             to={`/product/${this.getCartItemDetails().id}`}
+            state={{
+              id: this.getCartItemDetails().id,
+              activeColor: this.getCartItemDetails().productColor,
+              activeSize: this.getCartItemDetails().productSize,
+            }}
             onClick={() => {
               this.props.closeCart();
             }}
@@ -50,6 +67,11 @@ export class CartOverlayItem extends PureComponent {
           </Link>
           <Link
             to={`/product/${this.getCartItemDetails().id}`}
+            state={{
+            id: this.getCartItemDetails().id,
+              activeColor: this.getCartItemDetails().productColor,
+              activeSize: this.getCartItemDetails().productSize,
+            }}
             onClick={() => {
               this.props.closeCart();
             }}
@@ -126,6 +148,11 @@ export class CartOverlayItem extends PureComponent {
         <div className='cart-overlay-item-imageContainer'>
           <Link
             to={`/product/${this.getCartItemDetails().id}`}
+            state={{
+               id: this.getCartItemDetails().id,
+              activeColor: this.getCartItemDetails().productColor,
+              activeSize: this.getCartItemDetails().productSize,
+            }}
             onClick={() => {
               this.props.closeCart();
             }}

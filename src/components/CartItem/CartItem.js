@@ -11,17 +11,34 @@ import { numberCommaFormatter } from '../../util';
 
 export class CartItem extends PureComponent {
   getCartItemDetails = () => {
-    const { id, brand, name, activeAttribute, activeColor, qty, gallery } =
-      this.props.cartItem;
-    const pricing = this.props.cartItem.prices.filter(
+    const {
+      id,
+      brand,
+      name,
+      activeAttribute,
+      activeColor,
+      qty,
+      gallery,
+      attributes,
+      prices,
+    } = this.props.cartItem;
+    const pricing = prices.filter(
       (price) => price.currency.symbol === this.props.currency
     );
-    const color = this.props.cartItem.attributes.filter(
-      (attr) => attr.id === 'Color'
-    );
-    const size = this.props.cartItem.attributes.filter(
+    const color = attributes.filter((attr) => attr.id === 'Color');
+    const size = attributes.filter(
       (attr) => attr.id === 'Size' || attr.id === 'Capacity'
     );
+      const attributeSize = attributes.filter(
+      (attr) => attr.id !== 'Color'
+    );
+    const attributeColor = attributes.filter(
+      (attr) => attr.id === 'Color'
+    );
+    const productColor =
+      attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
+    const productSize =
+      attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
     return {
       pricing,
       color: color ? color : null,
@@ -33,6 +50,8 @@ export class CartItem extends PureComponent {
       activeColor,
       qty,
       gallery,
+      productSize,
+      productColor,
     };
   };
   render() {
@@ -41,8 +60,10 @@ export class CartItem extends PureComponent {
         <div className='cart-item-details'>
           <Link
             to={`/product/${this.getCartItemDetails().id}`}
-            onClick={() => {
-              this.props.closeCart();
+            state={{
+              id: this.getCartItemDetails().id,
+              activeColor: this.getCartItemDetails().productColor,
+              activeSize: this.getCartItemDetails().productSize,
             }}
           >
             <p className='cart-item-details-brand'>
@@ -51,8 +72,10 @@ export class CartItem extends PureComponent {
           </Link>
           <Link
             to={`/product/${this.getCartItemDetails().id}`}
-            onClick={() => {
-              this.props.closeCart();
+            state={{
+              id: this.getCartItemDetails().id,
+              activeColor: this.getCartItemDetails().productColor,
+              activeSize: this.getCartItemDetails().productSize,
             }}
           >
             <p className='cart-item-details-name'>
