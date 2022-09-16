@@ -34,6 +34,13 @@ export class Product extends PureComponent {
       });
     });
   };
+  getAttribute = () => {
+    const {activeSize, activeColor} = this.props.params.state;
+    this.setState({
+      activeColor: activeColor,
+      activeAttribute: activeSize,
+    });
+  };
   checkProducts = () => {
     if (this.state.product?.data) {
       const product = this.state.product?.data?.product;
@@ -86,8 +93,9 @@ export class Product extends PureComponent {
     this.getProduct();
   }
   componentDidUpdate(prevProps) {
-    if (this.props.params.id !== prevProps.params.id) {
+    if (this.props.params.state.id !== prevProps.params.state.id) {
       this.getProduct();
+      this.getAttribute();
     }
   }
   render() {
