@@ -42,7 +42,7 @@ export class MainButton extends PureComponent {
           height: this.props.height,
           color: this.getColor(),
           background: this.getBackground(),
-          cursor: this.props.cursor,
+          cursor: this.props.disabled ? 'not-allowed' : 'pointer',
         }}
         onClick={this.props.onClick}
         disabled={this.props.disabled}

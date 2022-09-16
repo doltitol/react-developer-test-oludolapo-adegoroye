@@ -5,6 +5,7 @@ export const useGQLQuery = {
   categories: async function getCategories() {
     return await client.query({
       query: allResolvers.CATEGORIES,
+      fetchPolicy: 'network-only',
     });
   },
   category: async function getCategory(category) {
@@ -15,16 +16,7 @@ export const useGQLQuery = {
           title: category,
         },
       },
-      fetchPolicy: 'network-only',
-    });
-  },
-  productItem: async function getProductItem(id) {
-    return await client.query({
-      query: allResolvers.PRODUCT,
-      variables: {
-        productId: id,
-      },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
     });
   },
   product: async function getProduct(id) {

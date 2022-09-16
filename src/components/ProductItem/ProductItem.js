@@ -1,46 +1,32 @@
-import React, { PureComponent } from 'react';
-import { Icons } from '../../assets/images/Icons';
-import { numberCommaFormatter } from '../../util';
+import React, {PureComponent} from 'react';
+import {Icons} from '../../assets/images/Icons';
+import {numberCommaFormatter} from '../../util';
 import './productitem.style.scss';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { addToCart } from '../../redux/actions/cartActions';
-import { useGQLQuery } from '../../graphql/useGQLQuery';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {addToCart} from '../../redux/actions/cartActions';
 
 export class ProductItem extends PureComponent {
   state = {
     showAddToCart: false,
-    product: {},
-  };
-  getProduct = () => {
-    const id = this.props.productId;
-    useGQLQuery.productItem(id).then((result) => {
-      this.setState((prevState) => {
-        return {
-          product: prevState.product === result ? prevState.product : result,
-        };
-      });
-    });
   };
   checkProducts = () => {
-    if (this.state.product?.data) {
-      const product = this.state.product?.data?.product;
-      const attributeSize = product.attributes.filter(
-        (attr) => attr.id !== 'Color'
-      );
-      const attributeColor = product.attributes.filter(
-        (attr) => attr.id === 'Color'
-      );
-      const newColor =
-        attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
-      const newSize =
-        attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
-      return {
-        activeSize: newSize,
-        activeColor: newColor,
-        product,
-      };
-    }
+    const product = this.props.product;
+    const attributeSize = product.attributes.filter(
+      (attr) => attr.id !== 'Color'
+    );
+    const attributeColor = product.attributes.filter(
+      (attr) => attr.id === 'Color'
+    );
+    const newColor =
+      attributeColor.length > 0 ? attributeColor[0].items[0].id : '';
+    const newSize =
+      attributeSize.length > 0 ? attributeSize[0].items[0].id : '';
+    return {
+      activeSize: newSize,
+      activeColor: newColor,
+      product,
+    };
   };
   checkInstock = () => {
     const inStock = this.checkProducts().product.inStock;
@@ -62,24 +48,23 @@ export class ProductItem extends PureComponent {
       return null;
     }
   };
-  componentDidMount() {
-    this.getProduct();
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.productId !== prevProps.productId) {
-      this.getProduct();
-    }
-  }
   render() {
     return (
       <>
-        {this.state.product?.data && (
+        {this.props.product && (
           <div
             className='product-item'
-            onMouseOver={() => this.setState({ showAddToCart: true })}
-            onMouseLeave={() => this.setState({ showAddToCart: false })}
+            onMouseOver={() => this.setState({showAddToCart: true})}
+            onMouseLeave={() => this.setState({showAddToCart: false})}
           >
-            <Link to={`/product/${this.checkProducts().product.id}`}>
+            <Link
+              to={`/product/${this.checkProducts().product.id}`}
+              state={{
+                id: this.checkProducts().product.id,
+                activeColor: this.checkProducts().activeColor,
+                activeSize: this.checkProducts().activeSize,
+              }}
+            >
               <div className='product-item-image'>
                 <img
                   src={this.checkProducts().product.gallery[0]}
@@ -103,14 +88,26 @@ export class ProductItem extends PureComponent {
                     ? 'rgba(94, 206, 123, 0.8)'
                     : '#5ECE7B'
                 }
+                style={{
+                  cursor: !this.checkProducts().product.inStock
+                    ? 'not-allowed'
+                    : 'pointer',
+                }}
                 className='product-item-addtocart'
                 onClick={() => this.handleAddToCart()}
               />
             )}
-            <Link to={`/product/${this.checkProducts().product.id}`}>
+            <Link
+              to={`/product/${this.checkProducts().product.id}`}
+              state={{
+                id: this.checkProducts().product.id,
+                activeColor: this.checkProducts().activeColor,
+                activeSize: this.checkProducts().activeSize,
+              }}
+            >
               <p
                 className='product-item-name'
-                style={{ color: this.checkInstock() }}
+                style={{color: this.checkInstock()}}
               >
                 {this.checkProducts().product.brand} -{' '}
                 {this.checkProducts().product.name}
@@ -124,7 +121,7 @@ export class ProductItem extends PureComponent {
                 <p
                   className='product-item-price'
                   key={item.currency.symbol}
-                  style={{ color: this.checkInstock() }}
+                  style={{color: this.checkInstock()}}
                 >
                   {item.currency.symbol} {numberCommaFormatter(item.amount)}
                 </p>

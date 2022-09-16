@@ -13,6 +13,6 @@ const link = setContext((_, { headers }) => {
 });
 
 export const client = new ApolloClient({
-  link: link.concat(new HttpLink({ uri: API_URL, fetch })),
+  link: link.concat(new HttpLink({uri: API_URL, fetch})),
   cache: new InMemoryCache(),
 });
